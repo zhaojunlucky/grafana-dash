@@ -1,0 +1,22 @@
+# Example Prometheus scrape configuration.
+# Each app gets a unique `job` label - that is the ONLY thing that differs between apps.
+# The Grafana dashboard discovers all apps automatically via:
+#   label_values(go_gin_http_server_requests_total, job)
+
+scrape_configs:
+  - job_name: markdown-writer
+    static_configs:
+      - targets:
+          - localhost:8080   # change to actual host:port
+        labels:
+          env: production    # optional extra label
+
+  - job_name: interview-quiz
+    static_configs:
+      - targets:
+          - localhost:8081
+        labels:
+          env: production
+
+  # To add a third app, just copy one block and change job_name + targets.
+  # No dashboard changes required.
