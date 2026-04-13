@@ -533,7 +533,7 @@
     },
     {
       "id": 33,
-      "title": "GC Duration (p99)",
+      "title": "GC Duration (p50 / p75 / max)",
       "type": "timeseries",
       "gridPos": { "h": 8, "w": 8, "x": 0, "y": 40 },
       "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
@@ -551,9 +551,21 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "histogram_quantile(0.99, sum(rate(go_gc_duration_seconds_bucket{job=\"$job\", instance=~\"$instance\"}[5m])) by (le, instance))",
-          "legendFormat": "{{instance}}",
+          "expr": "go_gc_duration_seconds{job=\"$job\", instance=~\"$instance\", quantile=\"0.5\"}",
+          "legendFormat": "{{instance}} p50",
           "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "go_gc_duration_seconds{job=\"$job\", instance=~\"$instance\", quantile=\"0.75\"}",
+          "legendFormat": "{{instance}} p75",
+          "refId": "B"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "go_gc_duration_seconds{job=\"$job\", instance=~\"$instance\", quantile=\"1\"}",
+          "legendFormat": "{{instance}} max",
+          "refId": "C"
         }
       ]
     },
